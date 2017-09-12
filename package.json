@@ -1,0 +1,19 @@
+{
+  "name": "liri-node-app",
+  "version": "1.0.0",
+  "description": "Node.JS\r .gitignore",
+  "main": "keys.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jeffpalin/liri-node-app.git"
+  },
+  "author": "Jeff Palin",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jeffpalin/liri-node-app/issues"
+  },
+  "homepage": "https://github.com/jeffpalin/liri-node-app#readme"
+}
