@@ -1,11 +1,12 @@
-// Import the NPM packages to liri.js
+// NPM packages
 var Twitter = require("twitter");
+var Spotify = require("node-spotify-api");
 var request = require("request");
 
 
 //------------------TWITTER--------------------------------------------------------------
 
-// import the twitter keys from keys.js and make a new object for authentification
+// Import the twitter keys from keys.js and make a new object for authentification
 var twitterKeys = require("./keys.js");
 var client = new Twitter(twitterKeys);
 
@@ -63,14 +64,16 @@ if (process.argv[2] === "movie-this") {
         // If the request is successful (i.e. if the response status code is 200)
         if (!error && response.statusCode === 200) {
             // Parse the body of the site and recover just the corresponding array value
-            console.log("The title of the movie is " + JSON.parse(body).Title);
-            console.log("The movie came out in " + JSON.parse(body).Year);
-            console.log("The IMBD Rating of the movie is " + JSON.parse(body).imdbRating);
-            console.log("The Rotten Tomatoes Rating of the movie is " + JSON.parse(body).Ratings[1].Value);
-            console.log("This country the movie was produced in is " + JSON.parse(body).Country);
-            console.log("This language of the movie is " + JSON.parse(body).Language);
-            console.log("The plot of the movie is " + JSON.parse(body).Plot);
-            console.log("The actors in this movie are " + JSON.parse(body).Actors);
+            console.log("----------------------------------------------------------");
+            console.log("Movie Name:                 " + JSON.parse(body).Title);
+            console.log("Release Year:               " + JSON.parse(body).Year);
+            console.log("IMBD Rating:                " + JSON.parse(body).imdbRating);
+            console.log("Rotten Tomatoes Rating:     " + JSON.parse(body).Ratings[1].Value);
+            console.log("Country:                    " + JSON.parse(body).Country);
+            console.log("Language:                   " + JSON.parse(body).Language);
+            console.log("Plot:                       " + JSON.parse(body).Plot);
+            console.log("Major Actors:               " + JSON.parse(body).Actors);
+            console.log("----------------------------------------------------------");
         }
     });
 }
