@@ -92,7 +92,7 @@ if (process.argv[2] === "movie-this") {
 
     //If no movie submitted then Mr Nobody is the requested movie
     //This also clears "The Sign" from process.argv[3]
-    if ((!process.argv[3]) || (process.argv[3] = "The Sign")) {
+    if (!process.argv[3]) {
         movieName = "Mr. Nobody";
     } else {
         // Loop through all the words in the node argument
@@ -105,6 +105,7 @@ if (process.argv[2] === "movie-this") {
             }
         }
     }
+    console.log(process.argv);
 
     // Make a variable for the URL for clarity
     var movieQueryUrl = "http://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&apikey=40e9cece";
