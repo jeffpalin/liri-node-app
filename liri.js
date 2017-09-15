@@ -48,7 +48,7 @@ if (process.argv[2] === "spotify-this-song") {
 
     //If no track submitted then The Sign is the requested track
     if (!process.argv[3]) {
-        trackName = "The Sign";
+        trackName = "The Sign+Ace of Base";
     } else {
         // Loop through all the words in the node argument
         // to handle the inclusion of "+"s
