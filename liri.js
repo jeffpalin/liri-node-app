@@ -2,21 +2,27 @@
 var Twitter = require("twitter");
 var Spotify = require("node-spotify-api");
 var request = require("request");
+var moment = require("moment");
 
+//Node.JS File System Core Package 
+var fs = require("fs");
+
+//keys.js for Twitter and Spotify
+var keys = require("./keys.js");
 
 //------------------TWITTER--------------------------------------------------------------
 
 // Import the twitter keys from keys.js and make a new object for authentification
-var twitterKeys = require("./keys.js");
-var client = new Twitter(twitterKeys);
+var client = new Twitter(keys.twitterKeys);
 
 // Terminal command to get tweets using "my-tweets"
 if (process.argv[2] === "my-tweets") {
 
-    // Twitter NPM code to get "tweets" array and loop through just the actual tweet text.
-    // Default max length = 20 tweets so no additional logic needed
-    var params = { screen_name: "jeff_ucsd" };
+    // screen_name = twitter handle with no # sign
+    // Count = 20 most recent tweets
+    var params = { screen_name: "jeff_ucsd", count: 20 };
 
+    // Twitter NPM code to get "tweets" array and loop through just the actual tweet text.
     client.get("statuses/user_timeline", params, function(error, tweets, response) {
         if (!error) {
             for (i = 0; i < tweets.length; i++) {
@@ -28,11 +34,33 @@ if (process.argv[2] === "my-tweets") {
 
 //------------------SPOTIFY---------------------------------------------------------------
 
+// Import the spotify keys from keys.js and make a new object for authentification
+var spotify = new Spotify(keys.spotifyKeys);
+var trackName = process.argv[3];
 
+// Terminal command to get songs using "spotify-this-song"
+if (process.argv[2] === "spotify-this-song") {
 
-
-
-
+    // Spotify NPM code to get song information
+    function getSpotify() {
+        spotify.request("https://api.spotify.com/v1/search?q=track:" + trackName + "&type=track&market=US")
+            .then(function(data) {
+                if (!process.argv[3]) {
+                    process.argv[3] = "The Sign";
+                } else {
+                    console.log(data.tracks.items[0].name + " is by " +
+                        data.tracks.items[0].artists[0].name + " on the " +
+                        data.tracks.items[0].album.name + " album");
+                    console.log("Song link: " + data.tracks.items[0].preview_url);
+                }
+            })
+            .catch(function(err) {
+                console.error('Error occurred: ' + err);
+            });
+    }
+    getSpotify();
+    console.log(process.argv);
+}
 
 //------------------OMDB MOVIE------------------------------------------------------------
 
@@ -45,13 +73,18 @@ if (process.argv[2] === "movie-this") {
     // Create an empty variable for holding the movie name
     var movieName = "";
 
-    // Loop through all the words in the node argument
-    // to handle the inclusion of "+"s
-    for (var i = 3; i < nodeArgs.length; i++) {
-        if (i > 3 && i < nodeArgs.length) {
-            movieName = movieName + "+" + nodeArgs[i];
-        } else {
-            movieName += nodeArgs[i];
+    //If no movie submitted then Mr Nobody is the requested movie
+    if (!process.argv[3]) {
+        movieName = "Mr. Nobody";
+    } else {
+        // Loop through all the words in the node argument
+        // to handle the inclusion of "+"s
+        for (var i = 3; i < nodeArgs.length; i++) {
+            if (i > 3 && i < nodeArgs.length) {
+                movieName = movieName + "+" + nodeArgs[i];
+            } else {
+                movieName += nodeArgs[i];
+            }
         }
     }
 
@@ -63,7 +96,7 @@ if (process.argv[2] === "movie-this") {
 
         // If the request is successful (i.e. if the response status code is 200)
         if (!error && response.statusCode === 200) {
-            // Parse the body of the site and recover just the corresponding array value
+            // Parse the body of the site and recover just the corresponding array values
             console.log("----------------------------------------------------------");
             console.log("Movie Name:                 " + JSON.parse(body).Title);
             console.log("Release Year:               " + JSON.parse(body).Year);
