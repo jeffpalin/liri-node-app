@@ -10,7 +10,7 @@ This application runs in the terminal using node.js.
         To get song information type the following:
         node liri.js movie-this movie name [ENTER]
         Note:
-        QUOTATION MARKS REQUIRED FOR TRACK NAME IF MULTIPLE WORDS!
+        NO QUOTATION MARKS REQUIRED FOR TRACK NAME IF MULTIPLE WORDS!
 
 3.) OMDB
         To get movie information type the following:

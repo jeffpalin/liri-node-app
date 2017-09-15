@@ -36,30 +36,47 @@ if (process.argv[2] === "my-tweets") {
 
 // Import the spotify keys from keys.js and make a new object for authentification
 var spotify = new Spotify(keys.spotifyKeys);
-var trackName = process.argv[3];
 
 // Terminal command to get songs using "spotify-this-song"
 if (process.argv[2] === "spotify-this-song") {
+
+    // Store all of the arguments in an array
+    var nodeArgs = process.argv;
+
+    // Create an empty variable for holding the track name
+    var trackName = "";
+
+    //If no track submitted then The Sign is the requested track
+    if (!process.argv[3]) {
+        trackName = "The Sign";
+    } else {
+        // Loop through all the words in the node argument
+        // to handle the inclusion of "+"s
+        for (var i = 3; i < nodeArgs.length; i++) {
+            if (i > 3 && i < nodeArgs.length) {
+                trackName = trackName + "+" + nodeArgs[i];
+            } else {
+                trackName += nodeArgs[i];
+            }
+        }
+    }
 
     // Spotify NPM code to get song information
     function getSpotify() {
         spotify.request("https://api.spotify.com/v1/search?q=track:" + trackName + "&type=track&market=US")
             .then(function(data) {
-                if (!process.argv[3]) {
-                    process.argv[3] = "The Sign";
-                } else {
-                    console.log(data.tracks.items[0].name + " is by " +
-                        data.tracks.items[0].artists[0].name + " on the " +
-                        data.tracks.items[0].album.name + " album");
-                    console.log("Song link: " + data.tracks.items[0].preview_url);
-                }
+                console.log("----------------------------------------------------------");
+                console.log("Artist:                " + data.tracks.items[0].artists[0].name);
+                console.log("Track Name:            " + data.tracks.items[0].name);
+                console.log("Album:                 " + data.tracks.items[0].album.name);
+                console.log("Track Preview Link:    " + data.tracks.items[0].preview_url);
+                console.log("----------------------------------------------------------");
             })
             .catch(function(err) {
                 console.error('Error occurred: ' + err);
             });
     }
     getSpotify();
-    console.log(process.argv);
 }
 
 //------------------OMDB MOVIE------------------------------------------------------------
@@ -74,7 +91,8 @@ if (process.argv[2] === "movie-this") {
     var movieName = "";
 
     //If no movie submitted then Mr Nobody is the requested movie
-    if (!process.argv[3]) {
+    //This also clears "The Sign" from process.argv[3]
+    if ((!process.argv[3]) || (process.argv[3] = "The Sign")) {
         movieName = "Mr. Nobody";
     } else {
         // Loop through all the words in the node argument
@@ -108,5 +126,15 @@ if (process.argv[2] === "movie-this") {
             console.log("Major Actors:               " + JSON.parse(body).Actors);
             console.log("----------------------------------------------------------");
         }
+    });
+}
+
+//------------------DO WHAT IT SAYS------------------------------------------------------------
+
+if (process.argv[2] === "do-what-it-says") {
+    // reads the text from random.txt with error control
+    fs.readFile('./random.txt', 'utf8', (err, data) => {
+        if (err) throw err;
+        console.log("node liri.js " + data);
     });
 }
